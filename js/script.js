@@ -92,5 +92,52 @@ function getTimeRemaining(endtime) {
             }
         }
     }
-        setClock('.timer', deadline);
+    
+    setClock('.timer', deadline);
+
+    const modalTriger = document.querySelectorAll('[data-modal]'),
+          modal = document.querySelector('.modal'),
+          modalCloseBtn = document.querySelector('[data-close]');
+    
+    function openModal(){
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId);
+    };
+
+    function hideModal(){
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    };
+
+    modalTriger.forEach(triger => {
+        triger.addEventListener('click', (event) => {                     
+            openModal();
+        });
+    });
+
+    modalCloseBtn.addEventListener('click', hideModal);
+
+    modal.addEventListener('click', (e) => {
+        if(e.target === modal){
+            hideModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code === "Escape" && modal.style.display === 'block'){
+            hideModal();
+        }
+    });
+
+    const modalTimerId = setTimeout(openModal, 5000);
+
+    function showModalByScroll() {
+        if(window.pageYOffset  + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    }
+    
+    window.addEventListener('scroll', showModalByScroll);
 });
